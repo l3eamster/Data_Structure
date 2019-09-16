@@ -179,4 +179,4 @@ def riffle(self, percent):
     temp_sec = temp_head
     #while temp_sec is not None and temp_main is not None:
         #store next item
-        #main_next =
+        #main_next = self.head
