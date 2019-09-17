@@ -1,8 +1,8 @@
 from ClassNode  import Node 
+import math
 class List:
     def __init__(self, head = None):
         self.head = head
-        self.tail = head
 
     def __str__(self):
         if self.size() is 0:
@@ -11,10 +11,10 @@ class List:
             temp = self.head
             s = ''
             while temp is not None:
-                s += temp.data
-                s += ' '
+                s += str(temp.data) + ' '
                 temp = temp.next
             return s
+    
 
     def size(self):
         temp = self.head
@@ -28,29 +28,34 @@ class List:
         return self.size() == 0
 
     def append(self, data):
-        if len(data) is not 0:
-            if self.size() is 0:
-                n = Node(data)
-                self.head = n
-                self.tail = n
-            else:
-                n = Node(data)
-                self.tail.next = n
-                n.prev = self.tail
-                self.tail = n
+        # if isinstance(data, Node):
+        #     newNode = data
+        # else:
+        #     newNode = Node(data) 
+        newNode = Node(data)           
+        if(self.head == None):
+            self.head = newNode
+        else:
+            temp = self.head
+            while True:
+                if temp.next == None:
+                    temp.next = newNode
+                    break
+                temp = temp.next
 
     def addHead(self, data):
-        if len(data) is  not 0:
-            if self.size() is 0:
-                n = Node(data)
-                self.head = n
-                self.tail = n
-            else:
-                n = Node(data)
-                n.next = self.head
-                self.head = n
+        if isinstance(data, Node):
+            newNode = data
+        else:
+            newNode = Node(data)
+        if(self.head == None):
+            self.head = newNode
+        else:
+            newNode.next = self.head
+            self.head = newNode
 
-    def isIn(self, data):
+
+    def isIn(self, data): #check wa me data in list
         temp = self.head
         while temp.data != data and temp.next != None:
             temp = temp.next
@@ -58,125 +63,140 @@ class List:
         
 
     def before(self, data):    #return ref of node before node te me data hai
-        temp = self.head
-        while temp is not None:
-            if temp.data is data:
-                return None if temp.prev is None else temp.prev
-            else:
+        if self.head == None or self.head.data == data:
+            return None
+        else:
+            temp = self.head
+            found = False
+            while temp.next != None:
+                if(temp.next.data == data):
+                    found = True
+                    break
                 temp = temp.next
-        return None
-
-    def remove (self, data):   #remove and return node te chai data
-        temp = self.head
-        while temp is not None:
-            if str(temp.data) is str(data):
-                if temp.prev is None and temp.next is None:
-                    self.head = None
-                    self.tail = None
-                    print('case : 1')
-                
-                elif temp.prev is not None and temp.next is None:
-                    self.tail = temp.prev
-                    self.tail.next = None
-                    temp.prev = None
-                    print('case : 2')
-
-                elif temp.prev is None and temp.next is not None:
-                    self.head = temp.next
-                    self.head.prev = None
-                    temp.next = None
-                    print('case : 3')
-
-                else:
-                    temp.prev.next = temp.next
-                    temp.next.prev = temp.prev
-                    temp.next = None
-                    temp.prev = None
-                    print('case : 4')
+            if found:
                 return temp
             else:
+                return None
+
+    def remove (self, data):   #remove and return node te chai data
+        dataRef = self.before(data)
+        removedNode = None
+        if dataRef != None: # ถ้า data not head
+            temp = self.head
+            while temp != dataRef:
                 temp = temp.next
-        return None
+            removedNode = temp.next
+            temp.next = temp.next.next
+        else:
+            if self.head != None and self.head.data == data:
+                removedNode = self.head
+                self.head = self.head.next
+        return removedNode
 
 
     def removeTail(self):  #remove and return last node
-        temp = self.tail
-        if temp is not None:
-            return self.remove(temp.data)
+        tail = None
+        if self.head != None:
+            if self.head.next == None: #if have one
+                tail = self.head
+                self.head = None
+            else:
+                temp = self.head
+                while temp.next.next != None:
+                    temp = temp.next
+                tail = temp.next
+                temp.next = None
+        return tail
 
     def removeHead(self):  #remove and return first node
-        temp = self.head
-        if temp is not None:
-            return self.remove(temp.data)
+        h = self.head
+        if self.head != None:
+            self.head = self.head.next
+            if self.head != None:
+                h.next = None
+        return h
+
+    def addByIndex(self, index, data):
+        # if isinstance(data, Node):
+        #     newNode = data
+        # else:
+        #     newNode = Node(data)  
+        newNode = Node(data)
+        if index == 0:
+            if self.head == None:
+                self.head = newNode
+            else:
+                newNode.next = self.head
+                self.head = newNode
+        else:
+            temp = self.head
+            for i in range(0, index-1):
+                temp = temp.next
+            aNode = temp.next
+            temp.next = newNode
+            newNode.next = aNode
+
+    def removeByIndex(self, index):
+        removedNode = None
+        if index == 0:
+            if self.head != None:
+                removedNode = self.head
+                self.head = self.head.next
+                removedNode.next = None
+        else:
+            temp = self.head
+            for i in range(0, index - 1):
+                temp = temp.next
+            removedNode = temp.next
+            temp.next = temp.next.next
+            removedNode.next = None
+        return removedNode
 
     def bottomUp(self, percent):
         if self.size() is 0:
             return 'Empty Linked List'
         if percent is 100 or 0:
             return
-        count = int(self.size() * (percent / 100))
+        count = math.floor(int(percent / 10))
+        for i in range(0, count):
+            self.append(self.removeHead())
+        return self
 
-        for j in range(count):
-            temp = self.head
-            self.remove(self.head.data)
-            self.append(temp.data)
+    def deBottomUp(self, percent):
+        if self.size() is 0:
+            return 'Empty Linked List'
+        if percent is 100 or 0:
+            return
+        n = math.floor(int(percent / 10))
+        for i in range(0, n):
+            self.addHead(self.removeTail())
+        return self
         
 
-    # #link tail->head
-    # self.head.prev = self.tail
-    # self.tail.next = self.head
+    def riffle(self, percent):
+        n = math.floor(int(percent / 10))
+        loop = self.size() - n
+        if n <= 5:
+            loop = n-1
+        index = 1
+        for i in range(0, loop):
+            temp = self.removeByIndex(n)
+            self.addByIndex(index, temp)
+            n += 1
+            index += 2
+        return self
+        
 
-    # #cut head and set new head
-    # temp = self.head
-    # for i in range(count):
-    #     temp = temp.next
-    # temp.prev.next = None
-    # temp.prev = None
-    # self.head = temp
-
-    # #set new tail
-    # temp = self.tail
-    # for i in range(count):
-    #     temp = temp.next
-    #     self.tail = temp
-
-
-def deBottomUp(self, percent):
-    if self.size() is 0:
-        return 'Empty Linked List'
-    if percent is 100 or 0:
-        return
-    count = int(self.size() * (percent / 100))
-    invert_count = self.size() - count
-    # invert_percent = 100 * (invert_count/self.size)
-    # self.bottomUp(int(invert_percent))
-    for j in range(invert_count):
-        temp = self.head
-        self.remove(self.head.data)
-        self.append(temp.data)
-
-
-def riffle(self, percent):
-    if self.size() is 0:
-        return 'Empty Linked List'
-    if percent is 100 or 0:
-        return
-    count = int(self.size() * (percent / 100))
-    
-    temp = self.head
-    for i in range(count):
-        temp = temp.next
-    self.tail = temp.prev
-    self.tail.next = None
-    temp_head = temp
-    temp_head.prev = None
-    while temp.next is not None:
-        temp = temp.next
-    temp_tail = temp
-
-    #insert temp list to main list
-    temp_main = self.head
-    temp_sec = temp_head
-    #while temp_sec is not None and temp_main is not None:
-        #store next item
-        #main_next = self.head
+    def deRiffle(self, percent):
+        n = math.floor(int(percent / 10)) 
+        indexToAdd = self.size() - 1
+        if n > 5:
+            n = self.size() - n
+        else:
+            n = n - 1
+            indexToAdd = n * 2
+        for i in range(0, n):
+            temp = self.removeByIndex(i + 1)
+            self.addByIndex(indexToAdd, temp)
+        return self
+        

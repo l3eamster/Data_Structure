@@ -1,8 +1,7 @@
 class Node:
-    def __init__(self, data, next = None, prev = None):
+    def __init__(self, data, next = None):
         self.data = data
-        self.next = next
-        self.prev = prev        
+        self.next = next      
 
     def __str__(self):
         return str(self.data)
@@ -12,12 +11,6 @@ class Node:
 
     def getNext(self):
         return self.next
-
-    def getPrev(self):
-        return self.prev
-
-    def setPrev(self, prev):
-        self.prev = prev
 
     def setData(self, data):
         self.data = data
