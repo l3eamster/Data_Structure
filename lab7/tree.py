@@ -23,3 +23,6 @@ def setLeft(self, left):   # mutator
  
 def setRight(self, right): # mutator     
     self.right = right 
+
+class BST:
+    def __init__(self, root)
