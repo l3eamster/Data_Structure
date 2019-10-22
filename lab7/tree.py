@@ -137,8 +137,37 @@ class BST:
         return None
         
 
-    def del(self, data): #เพื่อ delete node ที่มีdata ออกจาก BST 
-        
+    def delete(self, data): #เพื่อ delete node ที่มีdata ออกจาก BST 
+        return BST._delete(self.root, data)
+
+    def _delete(root, data):
+        if root is not None:
+            if data < root.data:
+                root.left = BST._delete(root.left, data)
+            elif data > root.data:
+                root.right = BST._delete(root.right, data)
+            else:
+                if root.left is None:
+                    temp = root.right
+                    root = None
+                    return temp
+                elif root.right is None:
+                    temp = root.left
+                    root = None
+                    return temp
+
+                temp = BST.minRoot(root.right)
+                root.data = temp.data
+                root.right = BST._delete(root.right, temp.data)
+            return root
+
+    def minRoot(root):
+        cur = root
+        # while cur.left is not None:
+        #     cur = cur.left
+        if cur.left is not None:
+            cur = BST.minRoot(cur.left)
+        return cur
 
 l = [int(e) for e in input("insert integers : ").split()] 
 print(l) 
@@ -153,3 +182,5 @@ print(t.search(0))
 print(t.path(17))
 t.preOrder()
 t.postOrder()
+print(t.delete(21))
+t.printSideway()
