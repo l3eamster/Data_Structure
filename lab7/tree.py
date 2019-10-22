@@ -79,15 +79,66 @@ class BST:
             print('   '*level, root.data, sep = '' )       
             BST._printSideway(root.left, level+1) 
 
-    # def preOrder(self): 
+    def preOrder(self): #พิมพ์ traverse ของ tree ในแต่ละแบบ 
+        BST._preOrder(self.root)         
+        print()
+
+    def _preOrder(root):
+        if root:   # if root is not None             
+            print(root.data, end = ' ')             
+            BST._inOrder(root.left)             
+            BST._inOrder(root.right) 
     
-    # def postOrder(self):
+    def postOrder(self): #พิมพ์ traverse ของ tree ในแต่ละแบบ 
+        BST._postOrder(self.root)         
+        print()
 
-    # def search(self, data):  
+    def _postOrder(root):
+        if root:   # if root is not None                          
+            BST._inOrder(root.left)             
+            BST._inOrder(root.right)
+            print(root.data, end = ' ')
 
-    # def path(self, data):
+    def search(self, data):  # เพื่อหาว่ามี data อยู่ใน tree หรือไม่ return pointer ที่ชี้ไปที่ node นั้น (python : return node นั้น) หากมี หรือ return None หากไม่มี 
+        if self.root is None:             
+            return None         
+        fp = None       #father of p             
+        p = self.root   #start comparing from root 
+        while p:    # while p is not None                 
+            fp = p  
+            if data == p.data:
+                return p 
+            elif data < p.data:  
+                p = p.left              
+            else:                  
+                p = p.right 
+        return None
 
-    # def del(self, data):
+    def path(self, data): #พิมพ์ path จาก root ไปยัง node ที่มีข้อมูล data 
+        if self.root is None:             
+            return
+        fp = None       #father of p  
+        l = []         
+        p = self.root   #start comparing from root 
+        while p:    # while p is not None                 
+            fp = p  
+            l.append(p.data)
+            if data == p.data:
+                s = ''
+                for i in range(len(l)):
+                    s += str(l[i])
+                    if i is not len(l)-1:
+                        s = s + ' -> '
+                return s
+            elif data < p.data:  
+                p = p.left              
+            else:                  
+                p = p.right 
+        return None
+        
+
+    def del(self, data): #เพื่อ delete node ที่มีdata ออกจาก BST 
+        
 
 l = [int(e) for e in input("insert integers : ").split()] 
 print(l) 
@@ -98,3 +149,7 @@ for ele in l:
  
 t.inOrder() 
 t.printSideway()
+print(t.search(0))
+print(t.path(17))
+t.preOrder()
+t.postOrder()
