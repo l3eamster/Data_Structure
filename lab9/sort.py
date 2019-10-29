@@ -14,6 +14,7 @@ def bubble(l):
     return l
 
 def selection(l):
+    #eiei
     for last in range(len(l)-1, -1, -1):
         biggest = l[0]
         biggest_i = 0
