@@ -53,15 +53,18 @@ def height(r):
             return hr+1 
  
 def path(r, d):     
-    """print path from node pointed by r to node that has data d"""     
-    if r.data != d:         
-        print(r.data, end = ' ')         
-        if d < r.data:             
-            path(r.left, d)         
-        else:             
-            path(r.right, d)     
-    else:         
-        print(d) 
+    """print path from node pointed by r to node that has data d"""  
+    if search(r, d) is not None:   
+        if r.data != d:         
+            print(r.data, end = ' ')         
+            if d < r.data:             
+                path(r.left, d)         
+            else:             
+                path(r.right, d)     
+        else:         
+            print(d)
+    else:
+        print('Do not have',d, 'in tree')
  
 def search(r, d):     
     """return pointer to node that has data d """     
@@ -91,9 +94,18 @@ def getFather(r, data):
                 break
         return fp
 
-def depth(r, d):
-    node = search(r, d)
-    return height(node)
+def depth(r, data):
+    dep = 0
+    p = r
+    while r:        
+        if data < p.data:
+            p = p.left
+        elif data > p.data:
+            p = p.right
+        dep = dep + 1
+        if data == p.data:
+            break     
+    return dep
 
 def smallest(r):
     if r.left == None:
@@ -118,7 +130,7 @@ printSideWay(r, 0)
  
 print('height of ', r.data, '=',  height(r)); 
  
-d = 5 
+d = 5
 print('path:', d, '=', end = ' ') 
 path(r, d) 
  
