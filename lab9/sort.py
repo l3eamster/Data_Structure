@@ -25,9 +25,18 @@ def selection(l):
     return l
 
 def insertion(l):
+    for i in range(1, len(l)):
+        ins = l[i]
+        for j in range(i, -1, -1):
+            if ins < l[j-1] and j > 0:
+                l[j] = l[j-1]
+            else:
+                l[j] = ins
+                break
+    return l
 
 l = [8, 3, 9, 4, 5]
-print(selection(l))
+print(insertion(l))
 
 # def print90(h, i, max_i): 
 #     if i < max_i: 
