@@ -1,6 +1,6 @@
 from math import log2 
 from math import floor 
-
+print('------------------------- SORT -------------------------')
 def bubble(l):
     for last in range(len(l)-1, -1, -1):
         swap = False
@@ -13,7 +13,7 @@ def bubble(l):
     return l
 
 l = [5,6,2,3,0,1,4] 
-print('bubble sort >>',bubble(l))
+print('bubble sort    >>',bubble(l))
 
 def selection(l):
     for last in range(len(l)-1, -1, -1):
@@ -57,7 +57,7 @@ def shell(l, dIncrements):
 
 l = [10,11,1,13,2,6,4,12,5,8,7,9,3] 
 dIncrements = [5,3,1] 
-print(shell(l, dIncrements))
+print('shell sort     >>', shell(l, dIncrements))
 
 
 
@@ -67,3 +67,6 @@ print(shell(l, dIncrements))
 #         print90(h, (i*2)+2, max_i) 
 #         print('   ' * indent, h[i]) 
 #         print90(h, (i*2)+1, max_i)
+
+
+print('--------------------------------------------------------')
