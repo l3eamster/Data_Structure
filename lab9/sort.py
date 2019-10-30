@@ -1,5 +1,4 @@
-from math import log2 
-from math import floor 
+
 print('')
 print('---------------------------- SORT ----------------------------')
 def bubble(l):
@@ -150,13 +149,6 @@ def quick(l, left, right):
         
 l = [5,1,4,9,0,3,8,2,7,6] 
 print('quick sort     >>', quick(l,0,len(l)-1))
-
-# def print90(h, i, max_i): 
-#     if i < max_i: 
-#         indent = floor(log2(i+1)) 
-#         print90(h, (i*2)+2, max_i) 
-#         print('   ' * indent, h[i]) 
-#         print90(h, (i*2)+1, max_i)
 
 
 print('--------------------------------------------------------------')
