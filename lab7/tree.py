@@ -175,11 +175,13 @@ print(l)
 t = BST() 
 for ele in l:     
     t.addI(ele) 
- 
+
+#14 4 9 7 15 3 18 16 20 5 16
+
 t.inOrder() 
 t.printSideway()
-print(t.search(0))
-print(t.path(17))
+print(t.search(16))
+print(t.path(5))
 t.preOrder()
 t.postOrder()
 print(t.delete(21))
