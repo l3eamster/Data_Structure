@@ -3,57 +3,125 @@ from math import floor
 
 print('------------------------------HEAP-------------------------------')
 
-def print90(h, i, max_i): 
-    if i < max_i: 
-        indent = floor(log2(i+1)) 
-        print90(h, (i*2)+2, max_i) 
-        print('   ' * indent, h[i]) 
-        print90(h, (i*2)+1, max_i)
 
-def insertMinHeap(h, i): 
-    """insertMinHeap""" 
-    print('insert', h[i], 'at index', i, end = '      ') 
-    print(h) 
-    insertEle = h[i] 
-    fi = (i-1)//2 
-    while i > 0  and insertEle < h[fi] : 
-        h[i] = h[fi] 
-        i = fi 
-        fi = (i-1)//2 
-    h[i] = insertEle
-
-h = [68, 65, 32, 24, 26, 21, 19, 13, 16, 14]
-for i in range(1, len(h)): 
-    insertMinHeap(h, i) 
-    print(h) 
-    print90(h, 0, i) 
-    print('------------------\n')
+def print90( ll, i=0, level=0 ):
+  if i in range(len(ll)):
+    # Right
+    print90(ll, i*2+2, level+1)
+    # Current
+    print('    '*level, ll.index(i), sep='')
+    # Left
+    print90(ll, i*2+1, level+1)
 
 
-def delMin(h, last): 
-    print('delMin', h[0], 'last index = ', last, end = '      ') 
-    print(h) 
-    insertEle = h[last] 
-    h[last] = h[0] #inplace sort the root 
-    hole = 0 
-    ls = hole*2+1 # left son indicies 
-    found = False 
-    while ls < last and not found: 
-        rs = ls if ls+1 >= last else ls+1 
-        min = ls if h[ls] < h[rs] else rs # minson index 
-        if h[min] < insertEle: 
-            h[hole] = h[min] # promote small son up to hole 
-            hole = min # going down the tree 
-            ls = hole*2+1 
-        else: 
-            found = True 
-    h[hole] = insertEle
+def insertMin( ll, data ):
+  ll.append(data)
+  heapifyMin(ll)
 
-h = [13,14,16,24,21,19,68,65,26,32,31] 
-for last in range(len(h)-1, -1, -1): 
-    delMin(h, last) 
-    print(h) 
-    print90(h, 0, last) 
-    print('------------------\n')
+def heapifyMin( ll, cur=None ):
+  cur = len(ll)-1 if cur is None else cur
+  before = int(cur//2 if cur % 2 == 1 else (cur/2)-1)
+  if before in range(len(ll)):
+    if ll.index(cur).data < ll.index(before).data:
+      ll.index(cur).data, ll.index(before).data = ll.index(before).data, ll.index(cur).data
+    heapifyMin(ll, before)
+    # if len(ll) > 1:
+    #   heapifyMin(ll[:len(ll)-1])
+
+def deleteMin( ll, last=None, d=None, i=0 ):
+  deleted = ll.index(i).data if d is None else d
+  last = len(ll)-1 if last is None else last
+  left = ll.index(i*2+1).data if i*2+1 <= last else None
+  right = ll.index(i*2+2).data if i*2+2 <= last else None
+
+  if right is None:
+    if left is None:
+      ll.index(last).data = deleted
+      return deleted
+    else:
+      ll.index(i).data = left
+      return deleteMin(ll, last, deleted, i*2+1)
+  else:
+    if left < right:
+      ll.index(i).data = left
+      return deleteMin(ll, last, deleted, i*2+1)
+    else:
+      ll.index(i).data = right
+      return deleteMin(ll, last, deleted, i*2+2)
+
+class LinkedList:
+
+  class Node:
+    def __init__( self, data, next=None ):
+      self.data = data
+      self.next = next
+    
+    def __str__( self ):
+      return str(self.data)
+
+  def __init__( self ):
+    self.head = self.Node(None)
+  
+  def __str__( self ):
+    linked_data = ''
+    p = self.head.next
+    while p is not None:
+      linked_data += str(p.data)
+      linked_data += ' -> ' if p.next is not None else ''
+      p = p.next
+    return linked_data
+  
+  def __len__( self ):
+    p = self.head.next
+    count = 0
+    while p is not None:
+      count += 1
+      p = p.next
+    return count
+  
+  def index( self, i ):
+    p = self.head.next
+    for _ in range(i):
+      if p.next is not None:
+        p = p.next
+      else:
+        return None
+    return p
+  
+  def append( self, data ):
+    p = self.head
+    while p.next is not None:
+      p = p.next
+    new_node = self.Node(data)
+    p.next = new_node
+
+  
+  
+heap = LinkedList()
+l = [68, 65, 32, 24, 26, 21, 19, 13, 16, 14]
+
+for e in l:
+  print('insert', e)
+  insertMin(heap, e)
+  print(heap)
+  print90(heap)
+  print('----------')
+
+
+a = []
+print('\nDELETED!')
+for i in reversed(range(1, len(heap))):
+  last = heap.index(i)
+  tmp = deleteMin(heap, i)
+  print('deleteMin', tmp, 'FindPlaceFor', last)
+  print(heap)
+  print90(heap)
+  print('----------')
+  a.append(tmp)
+
+
+print('Sorting', a)
+
+print('\n\n--------------------------------FINISH---------------------------------')
 
 
