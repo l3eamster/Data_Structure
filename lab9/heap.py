@@ -22,12 +22,12 @@ def insertMinHeap(h, i):
         fi = (i-1)//2 
     h[i] = insertEle
 
-# h = [30, 85, 97, 100, 200] 
-# for i in range(1, len(h)): 
-#     insertMinHeap(h, i) 
-#     print(h) 
-#     print90(h, 0, i) 
-#     print('------------------\n')
+h = [68, 65, 32, 24, 26, 21, 19, 13, 16, 14]
+for i in range(1, len(h)): 
+    insertMinHeap(h, i) 
+    print(h) 
+    print90(h, 0, i) 
+    print('------------------\n')
 
 
 def delMin(h, last): 

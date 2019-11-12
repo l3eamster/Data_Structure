@@ -93,62 +93,33 @@ def mergeSort(l, left, right):
 l = [5,3,6,1,2,7,8,4] 
 print('merge sort     >>', mergeSort(l,0, len(l)-1))
 
-# def quick(l, left, right): 
-#     if left == right+1: #only 2 elements 
-#         if l[left] > l[right]:
-#             l[left], l[right] = l[right], l[left] #swap 
-#         return 
-#     if left < right: 
-#         #partition 
-#         pivot = l[left] #first element pivot 
-#         i, j = left+1, right 
-#         while i<j: 
-#             while i<right and l[i]<=pivot: 
-#                 i += 1 
-#             while j>left and l[j]>=pivot: 
-#                 j -= 1 
-#             if i < j: 
-#                 l[i], l[j] = l[j], l[i] #swap 
-#         if left is not j: 
-#             l[left], l[j] = l[j], pivot # swap pivot to index j 
-#         quick(l, left, j-1) 
-#         quick(l, j+1, right)
-#     return l
 
-# l = [5,1,4,9,6,3,8,2,7,0] 
-# print('quick sort     >>', quick(l,0,len(l)-1))
+def quick( l, low=None, high=None ): 
+  low = 0 if low is None else low
+  high = len(l)-1 if high is None else high
 
-def quick(l, left, right): 
-    """last element pivot""" 
-    if left == right+1: #only 2 elements 
-        if l[left] > l[right]: 
-            l[left], l[right] = l[right], l[left] #swap 
-            return 
-    if left < right: 
-        #partition 
-        pivot = l[right] #last element pivot 
-        #print('-------------------------------------') 
-        #print(' 0  1  2  3  4  5  6  7  8  9 ', ' (left=', left, ' right=', right, ' pivot=', pivot,')', sep='') 
-        #print(l)        
-        i, j = left, right-1 
-        while i<j: 
-            while i<right and l[i]<=pivot: 
-                i += 1 
-            while j>left and l[j]>=pivot: 
-                j -= 1 
-            if i<j: 
-                l[i], l[j] = l[j], l[i] #swap 
-                #print(l , '(swap', l[i], '-',l[j],')') 
-        if right is not i: 
-            l[right], l[i] = l[i], pivot # swap pivot to index i 
-            #print(l, '(swap pivot',l[i] , '-',l[right],')') 
-        quick(l, left, i-1) 
-        quick(l, i+1, right) 
-    return l
+  if low < high: 
+    pi = partition(l,low,high) 
+
+    quick(l, low, pi-1) 
+    quick(l, pi+1, high) 
+
+def partition( l, low, high ): 
+  i = low-1                  
+  pivot = l[high]            
+
+  for j in range(low, high):  
+    if l[j] <= pivot: 
+      i += 1          
+      l[i], l[j] = l[j], l[i] 
+
+  l[i+1], l[high] = l[high], l[i+1] 
+  return i+1
         
         
 l = [5,1,4,9,0,3,8,2,7,6] 
-print('quick sort     >>', quick(l,0,len(l)-1))
+quick(l)
+print('quick sort     >>', l)
 
 
 print('--------------------------------------------------------------')
