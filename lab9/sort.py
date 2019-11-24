@@ -156,20 +156,90 @@ def quickLow( l, low=None, high=None ):
     pi = partitionLow(l,low,high) 
 
     quickLow(l, low, pi-1) 
-    quickLow(l, pi+1, high) 
+    quickLow(l, pi+1, high)     
 
 def partitionLow( l, low, high ): 
-  i = high+1                  
+  i = low+1                  
   pivot = l.index(low).data            
 
-  for j in range(high, low+1, -1):  
-    if l.index(j).data >= pivot: 
-      i -= 1          
-      l.index(i).data, l.index(j).data = l.index(j).data, l.index(i).data 
-      #print(l)
+  for j in range(low+1, high+1):  
+    if l.index(j).data <= pivot: 
+      if j != i:     
+        l.index(i).data, l.index(j).data = l.index(j).data, l.index(i).data 
+      i += 1 
 
-  l.index(i-1).data, l.index(low).data = l.index(low).data, l.index(i-1).data 
-  return i+1
+  l.index(low).data = l.index(i-1).data 
+  l.index(i-1).data = pivot
+
+  return i-1
+
+def quickMid( l, low, high, count): 
+
+  if high - low >= 2:
+        pivot, count = partitionMid(l,low,high,count)
+        count = quickMid(l, low, pivot-1,count)
+        count = quickMid(l, pivot+1, high,count)
+  elif high - low == 1:
+    if l.index(high).data < l.index(low).data:
+        l.index(low).data, l.index(high).data = l.index(high).data, l.index(low).data
+        count+=1
+  return count    
+
+def partitionMid( l, low, high, count): 
+  pivot = (high + low)//2
+  cur_pivot = high
+  l.index(high).data, l.index(pivot).data = l.index(pivot).data, l.index(high).data
+  i = low
+  j = high - 1
+  while 1:
+      while l.index(i).data < l.index(cur_pivot).data:
+          i += 1
+          count += 1
+      while l.index(j).data > l.index(cur_pivot).data:
+          j -= 1
+          count += 1
+      if i < j:
+          l.index(i).data, l.index(j).data = l.index(j).data, l.index(i).data
+          i += 1
+          j -= 1
+      else:
+          break
+  l.index(i).data, l.index(high).data = l.index(high).data, l.index(i).data
+  return i, count
+        
+# def quickM3(ll,left,right,count):
+#     if right - left >= 2:
+#         pivot, count = partitionM3(ll,left,right,count)
+#         count = quickM3(ll, left, pivot-1,count)
+#         count = quickM3(ll, pivot+1, right,count)
+#     elif right - left == 1:
+#         if ll.index(right).data < ll.index(left).data:
+#             ll.index(left).data, ll.index(right).data = ll.index(right).data, ll.index(left).data
+#             count+=1
+#     return count
+
+# def partitionM3(ll,left,right,count):
+#     pivot = (right + left)//2
+#     cur_pivot = right
+#     ll.index(right).data, ll.index(pivot).data = ll.index(pivot).data, ll.index(right).data
+#     i = left
+#     j = right - 1
+#     while 1:
+#         while ll.index(i).data < ll.index(cur_pivot).data:
+#             i += 1
+#             count += 1
+#         while ll.index(j).data > ll.index(cur_pivot).data:
+#             j -= 1
+#             count += 1
+#         if i < j:
+#             ll.index(i).data, ll.index(j).data = ll.index(j).data, ll.index(i).data
+#             i += 1
+#             j -= 1
+#         else:
+#             break
+#     ll.index(i).data, ll.index(right).data = ll.index(right).data, ll.index(i).data
+#     return i, count
+
         
 # lb = [10,11,1,0,13,2,6,4,12,5,8,7,9,3] 
 # llb = LinkedList()
@@ -222,28 +292,41 @@ def partitionLow( l, low, high ):
 # print('merge sort     >>', mergeSort(llm,0, llm.__len__()-1))
 # print()
         
-lqh = [5,1,4,9,0,3,8,2,7,6] 
-llqh = LinkedList()
+# lqh = [5,1,4,9,0,3,8,2,7,6] 
+# llqh = LinkedList()
 
-for i in lqh:
-  llqh.append(i)
+# for i in lqh:
+#   llqh.append(i)
 
-print('LinkedList     >>', llqh)
-quickHigh(llqh)
-print('quick sort     >>', llqh)
+# print('LinkedList     >>', llqh)
+# quickHigh(llqh)
+# print('quick sort     >>', llqh)
+# print()
+
+# lql = [5,1,4,9,0,3,8,2,7,6] 
+# llql = LinkedList()
+
+# for i in lql:
+#   llql.append(i)
+
+# print('LinkedList     >>', llql)
+# quickLow(llql)
+# print('quick sort     >>', llql)
+# print()
+
+lqm = [5,1,4,9,0,3,8,2,7,6] 
+llqm = LinkedList()
+
+for i in lqm:
+  llqm.append(i)
+
+print('LinkedList     >>', llqm)
+#countM3 = quickM3(llqm,0,llqm.__len__()-1,0)
+#print('After QuickM3 : ','count: ',countM3)
+count = 0
+quickMid(llqm, 0, llqm.__len__()-1, count)
+print('quick mid sort >>', llqm)
 print()
-
-lql = [5,1,4,9,0,3,8,2,7,6] 
-llql = LinkedList()
-
-for i in lql:
-  llql.append(i)
-
-print('LinkedList     >>', llql)
-quickLow(llql)
-print('quick sort     >>', llql)
-print()
-
 
 print('--------------------------------------------------------------')
 print('')
