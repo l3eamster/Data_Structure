@@ -173,72 +173,29 @@ def partitionLow( l, low, high ):
 
   return i-1
 
-def quickMid( l, low, high, count): 
-
-  if high - low >= 2:
-        pivot, count = partitionMid(l,low,high,count)
-        count = quickMid(l, low, pivot-1,count)
-        count = quickMid(l, pivot+1, high,count)
-  elif high - low == 1:
-    if l.index(high).data < l.index(low).data:
-        l.index(low).data, l.index(high).data = l.index(high).data, l.index(low).data
-        count+=1
-  return count    
-
-def partitionMid( l, low, high, count): 
-  pivot = (high + low)//2
-  cur_pivot = high
-  l.index(high).data, l.index(pivot).data = l.index(pivot).data, l.index(high).data
-  i = low
-  j = high - 1
-  while 1:
-      while l.index(i).data < l.index(cur_pivot).data:
-          i += 1
-          count += 1
-      while l.index(j).data > l.index(cur_pivot).data:
-          j -= 1
-          count += 1
-      if i < j:
-          l.index(i).data, l.index(j).data = l.index(j).data, l.index(i).data
-          i += 1
-          j -= 1
-      else:
-          break
-  l.index(i).data, l.index(high).data = l.index(high).data, l.index(i).data
-  return i, count
+def quickMid( l, left, right): 
+  if left >= right:
+    return
+  leftI = left
+  rightI = right
+  pivot = (right + left)//2
+  while leftI <= rightI:
+    while l.index(leftI).data < l.index(pivot).data:
+      leftI+=1
+    while l.index(rightI).data > l.index(pivot).data:
+      rightI-=1
+    if leftI <= rightI:
+      l.index(leftI).data, l.index(rightI).data = l.index(rightI).data, l.index(leftI).data
+      leftI+=1
+      rightI-=1
+  print(l)
+  if left <= rightI:
+    quickMid(l, left, rightI)
+  if leftI <= right:
+    quickMid(l, leftI, right)
         
-# def quickM3(ll,left,right,count):
-#     if right - left >= 2:
-#         pivot, count = partitionM3(ll,left,right,count)
-#         count = quickM3(ll, left, pivot-1,count)
-#         count = quickM3(ll, pivot+1, right,count)
-#     elif right - left == 1:
-#         if ll.index(right).data < ll.index(left).data:
-#             ll.index(left).data, ll.index(right).data = ll.index(right).data, ll.index(left).data
-#             count+=1
-#     return count
+#=======================================================
 
-# def partitionM3(ll,left,right,count):
-#     pivot = (right + left)//2
-#     cur_pivot = right
-#     ll.index(right).data, ll.index(pivot).data = ll.index(pivot).data, ll.index(right).data
-#     i = left
-#     j = right - 1
-#     while 1:
-#         while ll.index(i).data < ll.index(cur_pivot).data:
-#             i += 1
-#             count += 1
-#         while ll.index(j).data > ll.index(cur_pivot).data:
-#             j -= 1
-#             count += 1
-#         if i < j:
-#             ll.index(i).data, ll.index(j).data = ll.index(j).data, ll.index(i).data
-#             i += 1
-#             j -= 1
-#         else:
-#             break
-#     ll.index(i).data, ll.index(right).data = ll.index(right).data, ll.index(i).data
-#     return i, count
 
         
 # lb = [10,11,1,0,13,2,6,4,12,5,8,7,9,3] 
@@ -323,10 +280,12 @@ for i in lqm:
 print('LinkedList     >>', llqm)
 #countM3 = quickM3(llqm,0,llqm.__len__()-1,0)
 #print('After QuickM3 : ','count: ',countM3)
-count = 0
-quickMid(llqm, 0, llqm.__len__()-1, count)
+# count = 0
+quickMid(llqm, 0, llqm.__len__()-1)
 print('quick mid sort >>', llqm)
 print()
+
+#print(llqm.index(7).data>llqm.index(2).data)
 
 print('--------------------------------------------------------------')
 print('')
